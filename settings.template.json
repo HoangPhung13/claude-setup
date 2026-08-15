@@ -1,4 +1,10 @@
 {
+  "$schema": "https://json.schemastore.org/claude-code-settings.json",
+  "_readme": "Template of general-purpose ~/.claude/settings.json defaults. Not loaded by Claude Code directly. To use on a new machine: copy to settings.json, replace every {{CLAUDE_HOME}} with your actual home path (e.g. /Users/you/.claude), and add any machine- or project-specific permissions/hooks on top.",
+  "model": "sonnet",
+  "theme": "auto",
+  "showThinkingSummaries": true,
+  "effortLevel": "high",
   "env": {
     "CLAUDE_CODE_MAX_SUBAGENT_SPAWN_DEPTH": "2"
   },
@@ -11,18 +17,12 @@
       "Bash(node .gitnexus/run.cjs clean --force)",
       "Bash(npx gitnexus *)",
       "Bash(echo \"exit: $?\")",
-      "Bash(cd /Users/hoang/cincro-api && cat api/integrations/eventbridge/notifications.ts)",
-      "Read(//Users/hoang/cincro-api/**)",
       "mcp__gitnexus__impact",
-      "Bash(cd /Users/hoang/whizz-admin-portal && echo \"===whizz/tenant/branding refs===\" && rg -rln \"whizz|Whizz|tenant|branding|Branding|Cincro|cincro\" --glob '!node_modules' --glob '!*.json' --glob '!.next' | head -60)",
-      "Read(//Users/hoang/whizz-admin-portal/**)",
       "Bash(npx eslint *)",
       "Bash(echo \"EXIT: $?\")",
       "mcp__gitnexus__query",
       "Bash(npx prettier *)",
       "Bash(git mv *)",
-      "Bash(cd /Users/hoang/kidsafe-api; echo \"=== adminjs prisma patch ===\"; cat patches/@adminjs+prisma+5.0.4.patch)",
-      "Read(//Users/hoang/kidsafe-api/**)",
       "WebFetch(domain:www.prisma.io)",
       "Bash(npm view *)",
       "Bash(docker exec *)",
@@ -33,7 +33,6 @@
       "Bash(git stash show)",
       "Bash(git stash show *)",
       "Bash(echo \"EXIT=$?\")",
-      "Read(//Users/hoang/equiptek-api/**)",
       "Skill(orchestrate)",
       "Skill(orchestrate:*)",
       "Bash(git check-ignore *)",
@@ -204,64 +203,15 @@
     ]
   },
   "hooks": {
-    "Stop": [
-      {
-        "hooks": [
-          {
-            "type": "command",
-            "command": "node \"/Users/hoang/.claude/hooks/claude-notifier-on-stop.js\""
-          }
-        ]
-      }
-    ],
-    "PermissionRequest": [
-      {
-        "hooks": [
-          {
-            "type": "command",
-            "command": "node \"/Users/hoang/.claude/hooks/claude-notifier-on-permission.js\""
-          }
-        ]
-      }
-    ],
     "PreToolUse": [
-      {
-        "matcher": "AskUserQuestion",
-        "hooks": [
-          {
-            "type": "command",
-            "command": "node \"/Users/hoang/.claude/hooks/claude-notifier-on-question.js\""
-          }
-        ]
-      },
       {
         "matcher": "Grep|Glob|Bash",
         "hooks": [
           {
             "type": "command",
-            "command": "node '/Users/hoang/.claude/hooks/gitnexus/gitnexus-hook.cjs'",
+            "command": "node '{{CLAUDE_HOME}}/hooks/gitnexus/gitnexus-hook.cjs'",
             "timeout": 10,
             "statusMessage": "Enriching with GitNexus graph context..."
-          }
-        ]
-      }
-    ],
-    "UserPromptSubmit": [
-      {
-        "hooks": [
-          {
-            "type": "command",
-            "command": "node \"/Users/hoang/.claude/hooks/claude-notifier-on-prompt.js\""
-          }
-        ]
-      }
-    ],
-    "SubagentStop": [
-      {
-        "hooks": [
-          {
-            "type": "command",
-            "command": "node \"/Users/hoang/.claude/hooks/claude-notifier-on-subagent-stop.js\""
           }
         ]
       }
@@ -272,14 +222,12 @@
         "hooks": [
           {
             "type": "command",
-            "command": "node '/Users/hoang/.claude/hooks/gitnexus/gitnexus-hook.cjs'",
+            "command": "node '{{CLAUDE_HOME}}/hooks/gitnexus/gitnexus-hook.cjs'",
             "timeout": 10,
             "statusMessage": "Checking GitNexus index freshness..."
           }
         ]
       }
     ]
-  },
-  "effortLevel": "high",
-  "model": "sonnet"
+  }
 }

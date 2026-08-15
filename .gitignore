@@ -11,6 +11,7 @@ mcp-needs-auth-cache.json
 .last-cleanup
 remote-settings.json
 policy-limits.json
+settings.json
 
 # Session data
 history.jsonl
