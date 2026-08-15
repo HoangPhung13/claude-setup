@@ -1,0 +1,285 @@
+{
+  "env": {
+    "CLAUDE_CODE_MAX_SUBAGENT_SPAWN_DEPTH": "2"
+  },
+  "permissions": {
+    "allow": [
+      "Bash(node .gitnexus/run.cjs analyze)",
+      "mcp__gitnexus__detect_changes",
+      "mcp__gitnexus__list_repos",
+      "mcp__gitnexus__rename",
+      "Bash(node .gitnexus/run.cjs clean --force)",
+      "Bash(npx gitnexus *)",
+      "Bash(echo \"exit: $?\")",
+      "Bash(cd /Users/hoang/cincro-api && cat api/integrations/eventbridge/notifications.ts)",
+      "Read(//Users/hoang/cincro-api/**)",
+      "mcp__gitnexus__impact",
+      "Bash(cd /Users/hoang/whizz-admin-portal && echo \"===whizz/tenant/branding refs===\" && rg -rln \"whizz|Whizz|tenant|branding|Branding|Cincro|cincro\" --glob '!node_modules' --glob '!*.json' --glob '!.next' | head -60)",
+      "Read(//Users/hoang/whizz-admin-portal/**)",
+      "Bash(npx eslint *)",
+      "Bash(echo \"EXIT: $?\")",
+      "mcp__gitnexus__query",
+      "Bash(npx prettier *)",
+      "Bash(git mv *)",
+      "Bash(cd /Users/hoang/kidsafe-api; echo \"=== adminjs prisma patch ===\"; cat patches/@adminjs+prisma+5.0.4.patch)",
+      "Read(//Users/hoang/kidsafe-api/**)",
+      "WebFetch(domain:www.prisma.io)",
+      "Bash(npm view *)",
+      "Bash(docker exec *)",
+      "Bash(echo \"EXIT CODE: $?\")",
+      "Bash(git status *)",
+      "Bash(git stash list)",
+      "Bash(git stash list *)",
+      "Bash(git stash show)",
+      "Bash(git stash show *)",
+      "Bash(echo \"EXIT=$?\")",
+      "Read(//Users/hoang/equiptek-api/**)",
+      "Skill(orchestrate)",
+      "Skill(orchestrate:*)",
+      "Bash(git check-ignore *)",
+      "Bash(npm test *)",
+      "Bash(gh auth status)",
+      "Bash(gh auth status *)",
+      "Bash(gh api repos/*)",
+      "Bash(gh api 'repos/*)",
+      "Bash(gh api \"repos/*)",
+      "Bash(gh api orgs/*)",
+      "Bash(gh api users/*)",
+      "Bash(gh api user)",
+      "Bash(gh api user/*)",
+      "Bash(gh api search/*)",
+      "Bash(gh api rate_limit)",
+      "Bash(gh pr view *)",
+      "Bash(gh pr list)",
+      "Bash(gh pr list *)",
+      "Bash(gh pr diff *)",
+      "Bash(gh pr checks *)",
+      "Bash(gh pr status)",
+      "Bash(gh issue view *)",
+      "Bash(gh issue list)",
+      "Bash(gh issue list *)",
+      "Bash(gh repo view *)",
+      "Bash(gh repo list *)",
+      "Bash(gh run view *)",
+      "Bash(gh run list)",
+      "Bash(gh run list *)",
+      "Bash(gh workflow view *)",
+      "Bash(gh workflow list)",
+      "Bash(gh workflow list *)",
+      "Bash(gh release view *)",
+      "Bash(gh release list)",
+      "Bash(gh release list *)",
+      "Bash(gh label list *)",
+      "Bash(gh cache list *)",
+      "Bash(gh search *)"
+    ],
+    "deny": [
+      "Bash(git push)",
+      "Bash(git push *)",
+      "Bash(git commit)",
+      "Bash(git commit *)",
+      "Bash(git reset --hard)",
+      "Bash(git reset --hard *)",
+      "Bash(git restore)",
+      "Bash(git restore *)",
+      "Bash(git checkout .)",
+      "Bash(git checkout -- *)",
+      "Bash(git checkout -f *)",
+      "Bash(git clean)",
+      "Bash(git clean *)",
+      "Bash(git stash)",
+      "Bash(git stash -*)",
+      "Bash(git stash push*)",
+      "Bash(git stash save*)",
+      "Bash(git stash pop*)",
+      "Bash(git stash apply*)",
+      "Bash(git stash drop*)",
+      "Bash(git stash clear*)",
+      "Bash(git stash branch*)",
+      "Bash(git stash create*)",
+      "Bash(git stash store*)",
+      "Bash(git rebase)",
+      "Bash(git rebase *)",
+      "Bash(git merge)",
+      "Bash(git merge *)",
+      "Bash(git cherry-pick)",
+      "Bash(git cherry-pick *)",
+      "Bash(git branch -d *)",
+      "Bash(git branch -D *)",
+      "Bash(git tag -d *)",
+      "Bash(git update-ref -d *)",
+      "Bash(git reflog expire *)",
+      "Bash(git filter-branch *)",
+      "Bash(git filter-repo *)",
+      "Bash(rm -rf *)",
+      "Bash(rm -fr *)",
+      "Bash(rm -Rf *)",
+      "Bash(find * -delete)",
+      "Bash(sudo *)",
+      "Bash(dd *)",
+      "Bash(shred *)",
+      "Bash(mkfs *)",
+      "Bash(chmod -R *)",
+      "Bash(chown -R *)",
+      "Bash(gh api -X*)",
+      "Bash(gh api * -X*)",
+      "Bash(gh api --method*)",
+      "Bash(gh api * --method*)",
+      "Bash(gh api -f*)",
+      "Bash(gh api * -f*)",
+      "Bash(gh api -F*)",
+      "Bash(gh api * -F*)",
+      "Bash(gh api --field*)",
+      "Bash(gh api * --field*)",
+      "Bash(gh api --raw-field*)",
+      "Bash(gh api * --raw-field*)",
+      "Bash(gh api --input*)",
+      "Bash(gh api * --input*)",
+      "Bash(gh pr create *)",
+      "Bash(gh pr create)",
+      "Bash(gh pr merge *)",
+      "Bash(gh pr edit *)",
+      "Bash(gh pr close *)",
+      "Bash(gh pr reopen *)",
+      "Bash(gh pr comment *)",
+      "Bash(gh pr review *)",
+      "Bash(gh pr ready *)",
+      "Bash(gh pr lock *)",
+      "Bash(gh pr unlock *)",
+      "Bash(gh pr checkout *)",
+      "Bash(gh issue create *)",
+      "Bash(gh issue create)",
+      "Bash(gh issue edit *)",
+      "Bash(gh issue close *)",
+      "Bash(gh issue reopen *)",
+      "Bash(gh issue comment *)",
+      "Bash(gh issue delete *)",
+      "Bash(gh issue transfer *)",
+      "Bash(gh issue lock *)",
+      "Bash(gh release create *)",
+      "Bash(gh release edit *)",
+      "Bash(gh release delete *)",
+      "Bash(gh release upload *)",
+      "Bash(gh repo create *)",
+      "Bash(gh repo create)",
+      "Bash(gh repo delete *)",
+      "Bash(gh repo edit *)",
+      "Bash(gh repo rename *)",
+      "Bash(gh repo archive *)",
+      "Bash(gh repo fork *)",
+      "Bash(gh repo sync *)",
+      "Bash(gh workflow run *)",
+      "Bash(gh workflow enable *)",
+      "Bash(gh workflow disable *)",
+      "Bash(gh run rerun *)",
+      "Bash(gh run cancel *)",
+      "Bash(gh run delete *)",
+      "Bash(gh secret set *)",
+      "Bash(gh secret delete *)",
+      "Bash(gh variable set *)",
+      "Bash(gh variable delete *)",
+      "Bash(gh label create *)",
+      "Bash(gh label edit *)",
+      "Bash(gh label delete *)",
+      "Bash(gh gist create *)",
+      "Bash(gh gist edit *)",
+      "Bash(gh gist delete *)",
+      "Bash(gh cache delete *)",
+      "Bash(gh auth login *)",
+      "Bash(gh auth login)",
+      "Bash(gh auth logout *)",
+      "Bash(gh auth refresh *)",
+      "Bash(gh auth setup-git *)"
+    ],
+    "ask": [
+      "Bash(aws)",
+      "Bash(aws *)",
+      "Bash(git add)",
+      "Bash(git add *)",
+      "Bash(git checkout *)",
+      "Bash(git switch *)",
+      "Bash(git reset *)",
+      "Bash(git clone *)",
+      "Bash(rm *)"
+    ]
+  },
+  "hooks": {
+    "Stop": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node \"/Users/hoang/.claude/hooks/claude-notifier-on-stop.js\""
+          }
+        ]
+      }
+    ],
+    "PermissionRequest": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node \"/Users/hoang/.claude/hooks/claude-notifier-on-permission.js\""
+          }
+        ]
+      }
+    ],
+    "PreToolUse": [
+      {
+        "matcher": "AskUserQuestion",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node \"/Users/hoang/.claude/hooks/claude-notifier-on-question.js\""
+          }
+        ]
+      },
+      {
+        "matcher": "Grep|Glob|Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node '/Users/hoang/.claude/hooks/gitnexus/gitnexus-hook.cjs'",
+            "timeout": 10,
+            "statusMessage": "Enriching with GitNexus graph context..."
+          }
+        ]
+      }
+    ],
+    "UserPromptSubmit": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node \"/Users/hoang/.claude/hooks/claude-notifier-on-prompt.js\""
+          }
+        ]
+      }
+    ],
+    "SubagentStop": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node \"/Users/hoang/.claude/hooks/claude-notifier-on-subagent-stop.js\""
+          }
+        ]
+      }
+    ],
+    "PostToolUse": [
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node '/Users/hoang/.claude/hooks/gitnexus/gitnexus-hook.cjs'",
+            "timeout": 10,
+            "statusMessage": "Checking GitNexus index freshness..."
+          }
+        ]
+      }
+    ]
+  },
+  "effortLevel": "high",
+  "model": "sonnet"
+}
