@@ -3,7 +3,7 @@ name: tradie
 description: Use for bounded implementation against a spec that already exists — new files from a described shape, test scaffolding, refactors with a defined target, migrations, boilerplate, mechanical edits across a known file list. Executes a decision someone else made; does not redesign. Use when the thinking is already done.
 tools: Read, Write, Edit, Grep, Glob, Bash
 model: sonnet
-effort: medium
+effort: high
 color: green
 ---
 

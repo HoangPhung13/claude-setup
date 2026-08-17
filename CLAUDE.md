@@ -149,6 +149,11 @@ the first two combined.
   summary of what you did".
 - Delegate work, never judgment. If you haven't decided something, deciding it
   is your job or the council's — not a worker's.
+- **Already holding the context is not a reason to skip the spawn.** Having done
+  the design makes the brief cheap to write; it does not make your output tokens
+  on a multi-file edit cheap to spend. Once the shape is settled and the file
+  list is known, hand it over — including partway through work you started
+  yourself.
 - A subagent that reports itself blocked is working correctly. Read the blocker;
   don't immediately re-spawn with a nudge.
 
@@ -157,6 +162,13 @@ the first two combined.
 - The built-in `Explore` agent inherits my session model (capped at Opus). On an
   Opus session that means codebase search runs at Opus rates. The `Explore`
   override in `~/.claude/agents/` pins it to Haiku — **don't remove it.**
+- **Never pass `model` on an Agent call.** Every definition in
+  `~/.claude/agents/` already pins its own `model` and `effort`, and the
+  parameter silently overrides that frontmatter — which is how a `tradie` ends
+  up running a mechanical edit at Opus rates. If a task feels like it needs a
+  stronger tier than its agent is pinned to, that means you picked the wrong
+  agent, not the wrong model: judgment goes to `scientist`, bounded
+  implementation to `tradie`, legwork to `handyman`.
 - One well-briefed worker beats four speculative ones. Fan out on genuinely
   independent work, not to look busy.
 - Agent teams (`CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS`) cost several times a
