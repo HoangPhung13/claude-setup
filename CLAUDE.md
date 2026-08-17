@@ -106,11 +106,19 @@ If I mention cost, tokens, or usage limits at any point: drop to Lean immediatel
    and that's the line. Don't burn Opus tokens on `find`.
 2. **Plan, then stop.** Goal, files in scope, order of operations, what could go
    wrong, how we'll know it worked. Show it to me before the first edit.
-3. **Delegate execution by kind of thinking, not by size:**
+3. **Delegate execution by kind of thinking, not by size.** Delegating is the
+   default; doing it yourself is the exception, and the exception is narrow —
+   one file, a few lines, already open in your context. Past that line, spawn:
    - Judgment, architecture, tricky debugging, security, anything expensive to
      reverse → `scientist`
    - Bounded implementation against a spec that already exists → `tradie`
    - Search, triage, formatting, mechanical edits with a known pattern → `handyman`
+
+   **Impact radius picks the tier, not difficulty.** Several files, a wide
+   rename, anything you'd have to read in full before writing — that's a
+   `tradie`, even when you already know exactly what to type. Knowing the answer
+   makes the brief cheap; it does not make your reads and writes across six
+   files cheap.
 4. **You verify.** Never relay a subagent's "done" without reading the diff
    yourself. A worker reporting success is a claim, not evidence.
 5. **Stay lean.** Ask subagents for the smallest useful return. Don't pull whole
@@ -154,6 +162,9 @@ the first two combined.
   on a multi-file edit cheap to spend. Once the shape is settled and the file
   list is known, hand it over — including partway through work you started
   yourself.
+- **The tell:** if you're opening a third file to edit it in one turn, or
+  re-reading a file you already changed to change it again, the spawn was due
+  two files ago. Stop and brief a `tradie` with what's left.
 - A subagent that reports itself blocked is working correctly. Read the blocker;
   don't immediately re-spawn with a nudge.
 

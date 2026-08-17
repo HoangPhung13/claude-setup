@@ -183,6 +183,13 @@ do not see this conversation — if it isn't in the brief, it doesn't exist.
 **3 — Build (`tradie`).** One tradie, or several if the ledger marked this commit
 splittable and the file sets are disjoint.
 
+**You do not write the commit yourself.** Every file change in this step goes
+through a tradie, including changes you could type from memory. The brief is
+cheap because you did the planning; your reads and writes across the commit's
+file set are not, and the wider the commit's radius the worse that trade gets.
+If you catch yourself editing "just this one file first", you've already skipped
+the spawn.
+
 If something turns out to need judgment mid-flight — the spec is wrong, the
 approach doesn't fit what's actually in the file — stop the tradie. Decide it
 yourself if it's within the approved plan, bring it back to me if it isn't.
@@ -224,12 +231,44 @@ report you haven't checked.
 Then write the pitfalls into the ledger's **Handoff** section for this commit,
 mark it `handed back`, and **stop**. No "shall I continue?" — I'll say.
 
-While you're stopped I'll be reading the diff, and I'll often want corrections
-before I commit. That's `/amend`, in this same session — a correction pass, not
-a new commit. It doesn't re-gate and doesn't change the plan, only the
-**Handoff** notes. I may also edit or commit outside this session entirely, so
-when I say move on, mark this commit `done` and go back to step 1 — the recon
-pass is what tells you which of those actually happened.
+## Phase 5 — Corrections, while you're stopped
+
+While you're stopped I'm reading the diff, and I'll often want changes before I
+commit. **I say them as plain comments in this thread** — "change X", "actually
+make it Y", "drop that bit". That is the normal path and it needs no command
+from me: treat any comment arriving after a handback as a correction pass on
+that commit. Don't wait for `/amend`, and don't suggest I run it.
+
+A correction pass is not new work. No `EnterPlanMode`, no re-gate, no re-plan,
+no widening the commit beyond what I named.
+
+**Who does the edit** — the decision is already made, so this is only about cost:
+
+- A few lines, in files already in your context → do it yourself.
+- Anything wider — several files, a rename, a change you'd have to re-read the
+  files to make → one `tradie` with a three-sentence brief. You have the context
+  to write it in three sentences; it's your tokens on the edit that are worth
+  avoiding, and a correction with a wide radius is still a wide radius.
+- Needs a decision I haven't made, or reaches outside this commit's scope → stop
+  and name it. That's a ledger change or a `/council`, not a correction.
+  Amendments that quietly grow are how a commit stops matching the diff I
+  reviewed.
+
+Exactly what I asked for: no drive-by fixes, no reformatting, no renames I didn't
+name. If you spot something else, one line at the end. Re-run the project's own
+checks — the commit was green when you handed it back, it has to still be green.
+Never commit, and never stage unless I ask.
+
+Then append to this commit's **Handoff** section what I asked for and what
+changed, one line each — that section is the only reason the next tradie will
+know it happened. Reissue the **proposed commit message** if the correction
+changed what the commit claims. Return short: changed files one line each, the
+verification command and its result, the ledger line. No code summary; I'm
+looking at the diff.
+
+I may also edit or commit outside this session entirely, so when I say move on,
+mark this commit `done` and go back to phase 4 step 1 — the recon pass is what
+tells you which of those actually happened.
 
 ## Finishing
 
