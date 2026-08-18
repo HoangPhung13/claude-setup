@@ -1,7 +1,7 @@
 ---
 name: handover-api
 description: Write the API→frontend handover markdown at the end of an API session — the delta a frontend Claude Code session needs to consume what just shipped. Fixed section names, types copied verbatim from source, no UI prescription, no artifact. Use this whenever I am on the API side and ask for a handover, a handoff, a frontend contract, or "document this for the frontend" — even if I phrase it as just writing a markdown file, because the default instinct is to publish an artifact and invent a UI, and both are wrong. This is the API-side direction only; a handover written from a frontend repo is a different document and not this skill.
-when_to_use: When I finish work in an API repo and ask you to document it for the frontend — "write a handover", "handover MD for frontend", "document the contract for the FE session". Invoke it before reading or diffing anything: phase 1 does the delta sweep through handyman on Haiku, so orienting first throws that away at Opus rates.
+when_to_use: 'When I finish work in an API repo and ask you to document it for the frontend — "write a handover", "handover MD for frontend", "document the contract for the FE session". Invoke it before reading or diffing anything: phase 1 does the delta sweep through handyman on Haiku, so orienting first throws that away at Opus rates.'
 argument-hint: "[what shipped — feature, or PR/branch]"
 ---
 
