@@ -1,9 +1,10 @@
 {
   "$schema": "https://json.schemastore.org/claude-code-settings.json",
   "_readme": "Template of general-purpose ~/.claude/settings.json defaults. Not loaded by Claude Code directly. To use on a new machine: copy to settings.json, replace every {{CLAUDE_HOME}} with your actual home path (e.g. /Users/you/.claude), and add any machine- or project-specific permissions/hooks on top.",
-  "model": "sonnet",
+  "model": "opus",
   "theme": "auto",
   "showThinkingSummaries": true,
+  "verbose": true,
   "effortLevel": "high",
   "env": {
     "CLAUDE_CODE_MAX_SUBAGENT_SPAWN_DEPTH": "2"
