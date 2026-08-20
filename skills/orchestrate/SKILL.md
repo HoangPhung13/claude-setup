@@ -219,9 +219,12 @@ report you haven't checked.
 - **Changed** — one line per file. No code summary; I'm about to read the diff.
 - **Verified** — the exact commands you ran and their output. If you ran
   nothing, say "nothing run" and why.
-- **Proposed commit message** — subject and body, in a fenced block, ready to
-  paste. This is mine to edit, so write it as a claim about the change, not a
-  narration of the session.
+- **Proposed commit message** — **the subject line alone**, in a fenced block,
+  ready to paste. This is mine to edit, so write it as a claim about the change,
+  not a narration of the session. Add a body only when the subject genuinely
+  cannot carry the scope; commits are atomic by construction here, so that
+  should be rare. A body that restates the subject at greater length, or walks
+  through what changed file by file, is noise — I'm about to read the diff.
 - **Pitfalls for the next commit** — ambiguities you resolved and which way,
   workarounds left in place, anything deliberately deferred to a later commit,
   anything I redirected you on mid-flight, anything you found that the ledger got
