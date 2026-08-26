@@ -154,6 +154,10 @@ note of anything you deliberately left out.
   If it could not be checked, either leave it out or say in one clause that it
   was not checked.
 - No nitpicks survived this far. If one did, cut it.
+- **Not `ReportFindings`.** The deliverable is one block I paste into GitHub,
+  and a rendered findings list in my terminal is not that. The schema also has
+  no room for Scope, Files changed or Verified clean, so it could only ever
+  duplicate one section of six.
 
 ### The sections, in this order, with these names
 
