@@ -164,6 +164,9 @@ note of anything you deliberately left out.
 Always `##`, never `###`, and the same names every pass. Two reviews of two
 repos should read as the same document.
 
+`/inspect` uses this same spine with fewer sections. Keep the names identical
+across both; where they diverge below, the divergence is the point.
+
 **1. `## Verdict`** — one line, `Looks mergeable` or `N blocking`, then two
 sentences on what the PR actually does. Nothing else lives here.
 
@@ -186,15 +189,27 @@ because it is a judgment about the PR, not about a line.
 **4. `## Blocking`** — what breaks, the concrete path to it, and `path:line`.
 Mechanism, not adjectives.
 
-**5. `## Worth a look`** — not wrong, but unexercised, wide-reaching, or worth a
-smoke test before merge.
+**5. `## Worth a look`** — worth a smoke test before merge, but not a reason to
+hold it.
+
+**Blocking** means merging it produces a wrong result, a crash, or lost data on a
+path this PR actually takes. **Worth a look** means the code is correct as
+written but is unexercised, reaches further than it looks, or rests on an
+assumption worth confirming.
+
+The test is which sentence you can write. "These inputs reach this branch and
+return the wrong total" is blocking. "This could bite if a caller ever passes
+null" is worth a look.
 
 **6. `## Verified clean`** — the load-bearing things that were checked and hold
 up. This is what makes the rest of the comment worth trusting: it says where the
 review actually looked. Name the check, not the effort.
 
-Omit sections 4, 5 and 6 entirely when they would be empty. Never write a
-section heading followed by "none".
+`## Blocking` is always present, `None` when there is nothing. A reader
+scrolling a long comment cannot tell a clean bill of health from a section that
+was forgotten, and that is the one thing this comment has to be unambiguous
+about. Sections 5 and 6 are omitted entirely when empty; they carry no verdict,
+so their absence costs nothing.
 
 ### On a second pass, trim
 

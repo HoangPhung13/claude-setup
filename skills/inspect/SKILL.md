@@ -52,21 +52,48 @@ anything; an inspector that cannot ask reports blocked instead of guessing.
 - **No pasteable GitHub block.** This lands in chat, for me. `/dissect` is the
   one that produces a comment.
 
+## Blocking, or worth a look
+
+**Blocking** means merging it produces a wrong result, a crash, or lost data on a
+path this PR actually takes. **Worth a look** means the code is correct as
+written but is unexercised, reaches further than it looks, or rests on an
+assumption worth confirming.
+
+The test is which sentence you can write. "These inputs reach this branch and
+return the wrong total" is blocking. "This could bite if a caller ever passes
+null" is worth a look.
+
+Sorting a blocking finding into the softer bucket is the failure mode this
+section exists to stop. When in doubt it is blocking, and I will downgrade it
+myself.
+
 ## Return, under 300 words
 
-- **On my read** — one line per claim I made. Omit the section if I made none.
-- **Worth knowing** — findings, each with `path:line` and the mechanism in a
-  sentence or two. "Nothing" is a real answer and the likeliest one on a PR I
-  was able to read myself.
+Same spine as `/dissect`, same section names, fewer of them. That skill is the
+long form for a PR I could not read; this is the short form for one I did.
 
-  Prose by default. Only when I ask for it — `--findings`, or I say to use the
-  findings list — put this one section through `ReportFindings` instead:
-  `failure_scenario` is the mechanism sentence the rule above already demands.
-  Once, in the tool or in prose, never both. The other three sections stay as
-  prose regardless; a confirmation of my read and a clean-checked list are not
-  findings and have nowhere to sit in that schema.
-- **Checked and clean** — where you looked and found nothing. A short list, not
-  an account of the effort. This is what makes the section above worth trusting.
+- **Verdict** — one line. `Looks fine`, or `N blocking`.
+- **On my read** — one line per claim I made: confirmed, contradicted, or not
+  checkable. Omit if I made none. `/dissect` has no equivalent, because there I
+  have no read to test.
+- **Scope** — only when the diff does something the PR body never claimed.
+  Silence means it matched.
+- **Blocking** — always present, including when the answer is `None`. Same rule
+  as `/dissect`: a missing section reads as an oversight, not an all-clear.
+- **Worth a look** — omit when empty.
+- **Verified clean** — where you looked and found nothing. A short list, not an
+  account of the effort. This is what makes the two sections above worth
+  trusting.
 - **Couldn't check** — what you would have needed.
+
+No `Files changed` table. I have read the PR; an inventory of it is the one
+thing I do not need.
+
+Findings carry `path:line` and the mechanism in a sentence or two. Prose by
+default; only when I ask for it, with `--findings` or in words, put Blocking and
+Worth a look through `ReportFindings` instead, where `failure_scenario` is the
+mechanism sentence already demanded above. Once, in the tool or in prose, never
+both. The other sections stay prose regardless; a confirmation of my read and a
+clean-checked list are not findings and have nowhere to sit in that schema.
 
 No preamble, no closing offer.
