@@ -44,6 +44,14 @@ part of this, the conventions in the files you'd be touching, and any sibling
 implementation worth copying rather than inventing. If I named another repo,
 send a handyman there too.
 
+**Anything outside this repo gets read, not remembered.** The dependency's
+actual source under `node_modules` or `vendor`, the version the lockfile
+actually pins, the real response shape from a log line or a recorded fixture,
+the vendor's current docs. If a commit will rest on how something behaves and
+you know that only from training, it is a phase 1 gap, and it surfaces as a
+tradie guessing wrong two commits later. Where you genuinely could not check,
+write `unverified` next to the claim in the plan rather than smoothing over it.
+
 Be generous here. This is the cheapest context you will ever buy, and every gap
 you leave gets rediscovered later by a tradie or a scientist at several times
 the price.
@@ -100,6 +108,12 @@ Restate it in one line and spend the words on the ledger.
 No spawning, no edits, no "I'll get started on the uncontroversial part". Plan
 mode blocks the writes; this line is about not trying.
 
+**Name the branch this would build on**, in one line, from `git branch
+--show-current`. If it is `main` or `master`, say so and hold at the gate: this
+protocol produces a PR's worth of commits, and branching before commit 1 is
+cheaper than untangling after commit 4. Branching is mine to do; ask for it,
+never run it.
+
 ### The gate
 
 **Print the plan inline in chat first.** If it only exists in a plan file, I get
@@ -145,11 +159,24 @@ directory six weeks from now. `stripe-webhook-retries`, not `billing` or
 PRs when the branch name still makes sense. Check `plans/` first and pick
 another slug if yours is taken, rather than overwriting.
 
-Open the file with the PR's one-line goal, so the slug isn't the only clue about
-what it is. Then one section per commit: subject, intent, files, verification,
-status (`pending` · `handed back` · `done`), and an empty **Handoff**
-subsection. This survives compaction and new sessions; the chat transcript does
-not.
+Open the file with the PR's one-line goal, so the slug isn't the only clue
+about what it is, and the branch it was planned against.
+
+Then a **status table**, before the detail: one row per commit with number,
+subject, status, and a few words on the outcome. That table is the first thing
+a resuming session reads and the only part of the ledger I'll skim mid-review,
+so it has to be current rather than tidy. Update it at every status change, not
+at the end.
+
+Then one section per commit: subject, intent, files, verification, status, and
+an empty **Handoff** subsection. This survives compaction and new sessions; the
+chat transcript does not.
+
+**Statuses:** `pending` · `in progress` · `handed back` · `blocked` · `done`.
+Write `in progress` when you start phase 4 step 1, not when you finish it. A
+session that dies mid-commit otherwise leaves a `pending` row that lies about
+the tree, and the next session rebuilds work already on disk. `blocked` carries
+its reason in the outcome column.
 
 **Confirm `plans/` is actually ignored before writing** — `git check-ignore -q
 plans/`. If it isn't, stop and tell me. I review and commit by hand, and a
@@ -167,6 +194,9 @@ because the current one went well.
 Ask for: the exact current contents and shape of the files this commit touches,
 what's already there that overlaps, and `git log`/`git diff` since the last
 commit in the ledger.
+
+Mark the commit `in progress` in the status table before you brief anyone.
+The row is how a later session tells "not started" from "half built".
 
 This step is load-bearing, not ceremony. Between commits I amend the work and
 commit it myself, sometimes from a different session you can't see. **Your
@@ -232,7 +262,8 @@ report you haven't checked.
 - **Open / blocked** — anything unfinished, or "nothing".
 
 Then write the pitfalls into the ledger's **Handoff** section for this commit,
-mark it `handed back`, and **stop**. No "shall I continue?" — I'll say.
+move it to `handed back` in both the section and the status table, and **stop**.
+If you are stopping short instead, the status is `blocked` and the row says why. No "shall I continue?" — I'll say.
 
 ## Phase 5 — Corrections, while you're stopped
 
