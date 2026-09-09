@@ -1,7 +1,7 @@
 ---
 name: orchestrate
-description: Plan a PR as a series of commits, then execute one commit at a time — handyman recon, tradie build, verify, hand back for my review and my commit. Stops at every commit boundary. Reuses a /council synthesis if one is in this conversation, and defers to /council if the decision is expensive to reverse.
-when_to_use: 'When I ask for it in words — "orchestrate X", "plan this as commits", "plan and build X", "break this into a PR", or I otherwise name commits as the unit of work. Also when I say to carry on with a commit and a plans/*-ledger.md exists. Invoke it as your FIRST action, before reading or grepping anything: phase 1 does all recon through handyman on Haiku, so any orienting you do first is thrown away and was paid for at Opus rates. You do not need to understand the task before invoking — working that out is what the skill is for. Fire on my language only; never invoke because you judged a task big enough to deserve the protocol, which is escalating a mode on your own and costs me money.'
+description: Plan a PR as a series of commits, then execute one commit at a time — handyman recon, tradie build, verify, hand back for my review and my commit. Stops at every commit boundary. Also runs review rounds against work already committed, as a triage-and-fixup-map loop. Reuses a /council synthesis if one is in this conversation, and defers to /council if the decision is expensive to reverse.
+when_to_use: 'When I ask for it in words — "orchestrate X", "plan this as commits", "plan and build X", "break this into a PR", or I otherwise name commits as the unit of work. Also when I say to carry on with a commit and a plans/*-ledger.md exists, and when a code review comes back on work already committed on this branch — that is phase 6, and it fires even if the ledger is finished or gone. Invoke it as your FIRST action, before reading or grepping anything: phase 1 does all recon through handyman on Haiku, so any orienting you do first is thrown away and was paid for at Opus rates. You do not need to understand the task before invoking — working that out is what the skill is for. Fire on my language only; never invoke because you judged a task big enough to deserve the protocol, which is escalating a mode on your own and costs me money.'
 argument-hint: "[what you want built], or [commit N] to resume"
 allowed-tools: EnterPlanMode, ExitPlanMode, AskUserQuestion
 ---
@@ -267,6 +267,10 @@ If you are stopping short instead, the status is `blocked` and the row says why.
 
 ## Phase 5 — Corrections, while you're stopped
 
+This phase is about **one uncommitted commit** you just handed back. If the work
+is already committed, or the changes span commits, that is phase 6 — stop here
+and read it.
+
 While you're stopped I'm reading the diff, and I'll often want changes before I
 commit. **I say them as plain comments in this thread** — "change X", "actually
 make it Y", "drop that bit". That is the normal path and it needs no command
@@ -304,8 +308,128 @@ I may also edit or commit outside this session entirely, so when I say move on,
 mark this commit `done` and go back to phase 4 step 1 — the recon pass is what
 tells you which of those actually happened.
 
+## Phase 6 — Review rounds, on committed work
+
+A reviewer comes back — me, `/code-review`, `/inspect`, a PR thread — with
+findings against work that is **already committed**. This is not phase 5 and not
+a new plan. It is its own loop, and it is the one place in this skill where the
+deliverable is a claim about *history* rather than a dirty tree.
+
+**Which phase am I in.** Phase 5 is one uncommitted commit and a comment from
+me. Phase 6 is a list of findings against commits already in the log. If the
+tree is clean, or the ledger entries are `done`, or the findings span more than
+one commit, you are in 6. The failure mode is drifting into phase 5 behaviour
+because nothing else fits, and absorbing decisions phase 6 would have gated.
+
+You cannot declare this from my message alone — every tell requires looking. So
+step 1 opens with the cheap check and the declaration falls out of it.
+
+**1 — Recon, every round, non-negotiable.** Two parts, in order.
+
+First the cheap check, yourself, in one call: `git status` and `git log
+--oneline` from the branch's fork point. Declare the phase in one line from what
+they show, then continue.
+
+Then the full recon, through a `handyman`: the current contents of each file a
+finding names, and the commits touching them. Do this **every round**. I rebase,
+squash, reword and reorder between your turns — shas move, content moves with
+them, and the review's line numbers are stale the moment I touch the branch.
+Never carry a sha, a line number, or "commit 3 is the one that added X" across a
+turn without re-resolving it against the tree.
+
+**2 — Triage into verdicts, and gate.** No edits yet. One row per finding: what
+it claims, where it actually lives now, and a verdict —
+
+- **accept** — real, in scope, and you know the fix.
+- **decline** — wrong, already handled, or out of scope. One line of why.
+- **decide** — a genuine fork the reviewer surfaced. Both options in one line
+  each, plus your recommendation.
+
+Then **stop and gate**. `AskUserQuestion` for the decides — that is exactly what
+it is for, a concrete choice I have to make. Do not absorb a fork by picking the
+sensible-looking option; a reviewer finding a fork is the same class of event as
+phase 2 branch B, and if the answer is expensive to reverse, say so and send me
+to `/council` instead of resolving it in a fixup.
+
+Also gate anything that is **not a fixup**: a new migration, a directory move, a
+new dependency, a schema change, or a finding that only makes sense as new work.
+Name it at the gate as a new commit or a ledger change. Folding one of those
+into someone else's commit is the specific thing this phase exists to prevent.
+
+**3 — Attribute, from git. Two lookups, not one.** For every accepted finding:
+
+**A — who introduced it.** `git log -S'<symbol>'` or `git log -L`. Not `git log
+-1 -- <file>`, which answers a different question, and not the ledger, and never
+memory. **Attribution is the deliverable most likely to be wrong and the one I
+cannot check by reading the diff** — a fixup aimed at the wrong sha survives
+review and lands the change in the wrong commit.
+
+**B — has anything since touched the same lines.** `git log --oneline
+<sha>..HEAD -- <file>`, then read the hunks of whatever it returns. The
+file-scoped query is deliberate here and does not contradict the warning above:
+it is a cheap over-approximation of "has this moved", which you then narrow by
+reading. Finding the introducer is a different question and needs the precise
+tool.
+
+**The target is the latest commit the fix touches or depends on, not the
+earliest one that could claim it.** A fixup has to apply at its target *and*
+leave that commit green. If a later commit rewrote those lines, removed a field,
+or moved the block, a fixup aimed at the introducer either conflicts on rebase or
+silently reinstates state a later commit deliberately took out. Attribution being
+correct is not sufficient — this is the failure that survives a correct answer to
+lookup A.
+
+So: retarget to the latest commit that touched the lines, or land on top. A
+finding that spans commits, or attributes to none, lands on top too — say so
+explicitly rather than picking the nearest sha.
+
+**4 — Build by concern, through tradies.** Phase 4 step 3's rule holds: you do
+not write it yourself.
+
+**Partition by disjoint file sets, not by target commit.** Commit groups share
+files as a rule, not an exception — commits are sequential slices of one feature,
+so grouping on them makes the overlap check fire constantly and serialises a
+round that didn't need it. Cut the lanes by concern instead — repositories,
+domain, services, the cross-cutting move — so the file sets genuinely don't
+intersect, and phase 4's "two tradies never hold the same file" holds for free.
+
+A tradie does not need to know target shas; hunk-level attribution happens at
+map time in step 5. Each brief carries the findings in that lane, the file list,
+and the constraint that it fixes those findings and nothing else.
+
+**5 — Hand back the fixup map, and stop.** The output is not a commit message:
+
+- **Verdicts** — accepted / declined / decided, one line each. Declines carry
+  their reason; round 2 re-raises anything you declined silently.
+- **Fixup map** — one row per target commit: sha as of *this round's* recon,
+  subject, and what lands there with one line on why. **A file whose hunks split
+  across commits is named by hunk, not by path** — "`ticket-type-repository.ts`
+  — the update-guard hunk only". A bare path in a row means the whole file.
+- **Verified** — the commands you ran and their output, at the tip. Say plainly
+  that this is the tip only: whether each commit is still green *after* the
+  autosquash cannot be checked without rewriting history, which is mine to do.
+  Step 3's retarget rule is what stands in for that check — if you skipped it,
+  say so here.
+- **Unattributed** — anything landing as a new commit on top, and why.
+- **Commands** — for **me** to run, in order, in a fenced block. Whole-file
+  targets: `git add <paths>` then `git commit --fixup <sha>`. **A split file gets
+  `git add -p <file>` with a comment naming the hunks for that sha**, before its
+  fixup line — never a flat path, which stages the other commit's hunk into this
+  one and does it silently. You do not run any of it, you do not `--autosquash`,
+  you do not rebase. This phase touches history more than any other; that makes
+  the git rule tighter here, not looser.
+
+Record the round in the ledger under `## Review round N` — findings, verdicts,
+and where each landed. If the ledger is already deleted, say so and put the map
+in the chat only; don't resurrect it.
+
+Then stop. Another round of findings means another round of this loop, starting
+at step 1, because by then I will have rebased.
+
 ## Finishing
 
 When the last commit is marked done, say so in one line, list the commit
 subjects in order, and name anything in the ledger that was dropped or deferred.
-Then delete the ledger file, or tell me why it should stay.
+Then **keep the ledger** until the branch is merged — review comes back after
+the last commit is done, and phase 6 records its rounds there. Ask before
+deleting it; don't delete it as a tidy-up.

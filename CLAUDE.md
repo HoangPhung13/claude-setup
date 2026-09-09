@@ -83,7 +83,12 @@ staging exists to avoid. Never stage on your own initiative, including work you
 just finished; finishing is not a reason to stage.
 
 Read-only git is fine and often the right move: `status`, `log`, `diff`, `show`,
-`blame`. Use it to orient yourself instead of guessing.
+`blame`. **Check `git status` and `git log` before you start editing, not
+after** — I stage, commit and rebase between your turns, so the tree you
+remember is not the tree on disk. When attributing code to a commit, use `git
+log -S'<symbol>'` to find what introduced it; `git log -1 -- <file>` answers a
+different question — the last commit to touch that file — and is usually the
+wrong one.
 
 Cloning or checking out a **different** repo for reference — reading a
 dependency's source, say — is allowed to *ask*, never to just do. Let the
