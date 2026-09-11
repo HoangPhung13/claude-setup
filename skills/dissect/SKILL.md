@@ -55,6 +55,26 @@ Print that one line. If it comes back small enough that I could plainly read it
 myself, say so and tell me to run `/code-review <n>` instead. Stopping here is a
 success. This skill costs several subagents; it has to earn them.
 
+**Then resolve the house rules, before anything is briefed.** One `find` per
+repo root in scope, for `CLAUDE.md` and `AGENTS.md`:
+
+```
+find <root> \( -name node_modules -o -name vendor -o -name .git \) -prune -o \
+  \( -name CLAUDE.md -o -name AGENTS.md \) -print
+```
+
+Read them into your own context, verbatim. This is the one deliberate exception
+to phase 1's "you read nothing yourself": every lane needs these, they are
+kilobytes rather than hunks, and a handyman that digests them to bullets drops
+the one constraint that mattered.
+
+The nested files are the point. A slice scoped to `packages/api/*` wants
+`packages/api/CLAUDE.md`, and that is the file most likely to carry the
+convention a reviewer would otherwise miss. A subagent inherits only the rules
+this session had loaded when it was spawned, so a nested file I haven't caused
+you to load is a file the reviewer never sees. Reference:
+https://code.claude.com/docs/en/sub-agents.md
+
 ## Phase 0.5 — Is this a second pass?
 
 Ask this before any recon, because the answer collapses phases 1 through 3. A
@@ -97,8 +117,9 @@ Cover:
   claim to do?
 - **Shape.** `git diff --numstat <base>...<head>`, full list. Directory
   clustering. Which files are generated, vendored, lockfiles, snapshots.
-- **House rules.** `AGENTS.md`, `CLAUDE.md`, `CONTRIBUTING.md`, the lint and
-  tsconfig setup. Return the rules as bullets. If none exists, say so and the
+- **House rules.** Phase 0 already holds `CLAUDE.md` and `AGENTS.md`; this lane
+  covers what's left, `CONTRIBUTING.md` and the lint and tsconfig setup, as
+  bullets. If phase 0 found nothing and this lane finds nothing, say so and the
   priority ladder in phase 3 collapses to standard review.
 - **The conversation**, if the thread is long: `gh pr view <n> --comments`.
   Digest to what a reviewer needs, not a transcript.
@@ -133,16 +154,23 @@ the gate is. Use it only for a real fork you cannot resolve, before the gate.
 ## Phase 3 — Fan out, one reviewer per slice
 
 Spawn them concurrently, one message. Every brief carries: the goal, the exact
-file list, the range, the house rules from phase 1, the PR's stated intent, and
-the return shape. Workers cannot see this conversation.
+file list, the range, the house rules covering that slice, the PR's stated
+intent, and the return shape. Workers cannot see this conversation.
 
 Tell each reviewer to work the ladder in this order, because a finding high on
 it outranks three below it:
 
 1. **Scope** — does this slice do something the PR never said it would?
-2. **House rules** — the bullets from phase 1. Blocking when violated.
+2. **House rules** — the ones carried in this brief. Blocking when violated.
 3. **Correctness** — bugs, edge cases, security, regressions.
 4. **Conventions** — only where the file's own neighbours disagree with it.
+
+**The rules go in verbatim, scoped to the slice.** Pass the phase 0 file nearest
+that slice's files, not every rules file you found, and never a paraphrase.
+Where the review spans repos, a slice carries its own repo's rules only. Where a
+repo's rules and my global `~/.claude/CLAUDE.md` disagree on something local to
+that repo, the repo wins, and the brief says so rather than leaving the reviewer
+to pick.
 
 **No nitpicks, at any tier.** The bar is whether a reviewer would act on it.
 

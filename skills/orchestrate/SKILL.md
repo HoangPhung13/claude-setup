@@ -36,13 +36,35 @@ real approval prompt rather than a message that just stops.
 
 ## Phase 1 — Ground yourself (cheap)
 
+**First, the house rules, and this one you read yourself.** Before any handyman
+is briefed, `find` every `CLAUDE.md` and `AGENTS.md` under each repo root in
+scope and read them verbatim:
+
+```
+find <root> \( -name node_modules -o -name vendor -o -name .git \) -prune -o \
+  \( -name CLAUDE.md -o -name AGENTS.md \) -print
+```
+
+A subagent inherits only the rules this session had loaded when it was spawned,
+which is this repo's hierarchy and nothing else. Pointing a handyman at another
+repo buys it file access, not that repo's conventions, and a nested file under
+`packages/*` is missed the same way even here whenever nothing has caused you to
+load it yet. The recon lanes need these as much as the tradies do, so a lane
+that goes out before this step is a lane working blind. Reference:
+https://code.claude.com/docs/en/sub-agents.md
+
+Setting `CLAUDE_CODE_ADDITIONAL_DIRECTORIES_CLAUDE_MD=1` would load added repos
+at startup instead. It is deliberately not set: it puts every repo's rules into
+every session and every lane, with no way to tell afterwards which set a tradie
+actually followed.
+
 Delegate to `handyman` — several in parallel if the surface is wide. Do not read
 the codebase yourself yet.
 
 Cover at least: the files that would change, what already exists that solves
 part of this, the conventions in the files you'd be touching, and any sibling
 implementation worth copying rather than inventing. If I named another repo,
-send a handyman there too.
+send a handyman there too, briefed on that repo's rules rather than this one's.
 
 **Anything outside this repo gets read, not remembered.** The dependency's
 actual source under `node_modules` or `vendor`, the version the lockfile
@@ -172,6 +194,10 @@ Then one section per commit: subject, intent, files, verification, status, and
 an empty **Handoff** subsection. This survives compaction and new sessions; the
 chat transcript does not.
 
+Record the resolved rules files too: their paths and mtimes, not their contents.
+A resuming session inherits the set instead of rediscovering it, and re-reads
+them at brief time so an edited rules file is never served stale.
+
 **Statuses:** `pending` · `in progress` · `handed back` · `blocked` · `done`.
 Write `in progress` when you start phase 4 step 1, not when you finish it. A
 session that dies mid-commit otherwise leaves a `pending` row that lies about
@@ -209,6 +235,12 @@ notes from earlier commits into a tradie brief. Every brief carries: goal, exact
 files in scope and what's off-limits, constraints and conventions, relevant
 pitfalls inherited from previous commits, and the expected return shape. Workers
 do not see this conversation — if it isn't in the brief, it doesn't exist.
+
+**The house rules go in verbatim** — the phase 1 file nearest this commit's file
+set, not every file you found and not a paraphrase. One tradie, one repo: a
+commit spanning two repos is two briefs, each carrying only its own repo's
+rules. Where a repo's rules and my global `~/.claude/CLAUDE.md` disagree on
+something local to that repo, the repo wins, and the brief says so.
 
 **3 — Build (`tradie`).** One tradie, or several if the ledger marked this commit
 splittable and the file sets are disjoint.
@@ -395,7 +427,9 @@ intersect, and phase 4's "two tradies never hold the same file" holds for free.
 
 A tradie does not need to know target shas; hunk-level attribution happens at
 map time in step 5. Each brief carries the findings in that lane, the file list,
-and the constraint that it fixes those findings and nothing else.
+the house rules covering those files verbatim as in phase 4 step 2, and the
+constraint that it fixes those findings and nothing else. No lane spans two git
+repos.
 
 **5 — Hand back the fixup map, and stop.** The output is not a commit message:
 
