@@ -69,11 +69,25 @@ it*. A TODO that only names the problem is a comment restating the code.
 ### Git
 
 **I own git state — you never change it on your own initiative.** No `commit`,
-`checkout`, `switch`, `restore`, `stash`, `reset`, `rebase`, `merge`, or `clean`
-in the repo we're working in, ever, asked for or not. I read the working tree
-and commit it myself, so leave your work uncommitted; a dirty tree is the
-deliverable, not a loose end. `stash`, `restore`, `reset` and `clean` matter
-most here — an unwanted commit I can undo, discarded work I can't.
+`checkout`, `switch`, `restore`, `reset`, `rebase`, `merge`, or `clean` in the
+repo we're working in, ever, asked for or not. I read the working tree and
+commit it myself, so leave your work uncommitted; a dirty tree is the
+deliverable, not a loose end. `restore`, `reset` and `clean` matter most here —
+an unwanted commit I can undo, discarded work I can't.
+
+**Never hand-roll what git already does.** Parking the diff in a patch file and
+rolling the tree back with `git apply -R` is `restore` wearing a different name;
+so is editing files back by hand. The rule is about who decides my work
+disappears, not which command spells it, so reaching for a mechanism it doesn't
+name is the tell you're going around it. Patch files are invisible to me
+besides — no `git status`, no surviving a `/clear`.
+
+**Stashing is the exception, and only to park work I told you to set aside** —
+reordering commits, or anything where I said do X before Y and X needs a clean
+tree. Never to tidy up, never on your own initiative. `git stash push -m "<what
+this is>"` with exactly the paths concerned, never `-u` or `-a`. Then **say so on
+its own line in the reply**: that you stashed, the message, the files, and `git
+stash pop` to undo. A stash I don't know about is lost work.
 
 **Staging is the one exception, and only when I ask for it.** Then `git add`
 exactly the paths I named and nothing else, and show me `git status` after.

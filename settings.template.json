@@ -89,9 +89,7 @@
       "Bash(git clean *)",
       "Bash(git stash)",
       "Bash(git stash -*)",
-      "Bash(git stash push*)",
       "Bash(git stash save*)",
-      "Bash(git stash pop*)",
       "Bash(git stash apply*)",
       "Bash(git stash drop*)",
       "Bash(git stash clear*)",
@@ -189,7 +187,11 @@
       "Bash(gh auth login)",
       "Bash(gh auth logout *)",
       "Bash(gh auth refresh *)",
-      "Bash(gh auth setup-git *)"
+      "Bash(gh auth setup-git *)",
+      "Bash(git stash push -u*)",
+      "Bash(git stash push -a*)",
+      "Bash(git stash push --include-untracked*)",
+      "Bash(git stash push --all*)"
     ],
     "ask": [
       "Bash(aws)",
@@ -200,7 +202,12 @@
       "Bash(git switch *)",
       "Bash(git reset *)",
       "Bash(git clone *)",
-      "Bash(rm *)"
+      "Bash(rm *)",
+      "Bash(git stash push -m *)",
+      "Bash(git stash pop)",
+      "Bash(git stash pop *)",
+      "Bash(git stash list)",
+      "Bash(git stash list *)"
     ]
   },
   "hooks": {
