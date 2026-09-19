@@ -390,11 +390,24 @@ into someone else's commit is the specific thing this phase exists to prevent.
 
 **3 — Attribute, from git. Two lookups, not one.** For every accepted finding:
 
-**A — who introduced it.** `git log -S'<symbol>'` or `git log -L`. Not `git log
--1 -- <file>`, which answers a different question, and not the ledger, and never
-memory. **Attribution is the deliverable most likely to be wrong and the one I
-cannot check by reading the diff** — a fixup aimed at the wrong sha survives
-review and lands the change in the wrong commit.
+**A — who introduced it. Resolve at line level, never file level.** Take the
+line numbers as they stand at HEAD, then ask git about *those lines*:
+
+```
+git show HEAD:<file> | grep -n '<the signature or literal you are changing>'
+git log --oneline -L <start>,<end>:<file>
+```
+
+`git log -S'<symbol>'` is the equivalent when the thing moved between files. The
+ledger and your memory are not sources.
+
+**No file-scoped query may pick a target** — not `git log -1 -- <file>`, not
+`git log --oneline -- <file>`. Those answer "what last touched this file", and
+on a branch whose commits revisit the same files by design that is almost never
+the commit owning your lines. Worse, it is often right *by coincidence*, so it
+survives review looking as though it was checked. **Attribution is the
+deliverable most likely to be wrong and the one I cannot check by reading the
+diff** — a fixup aimed at the wrong sha lands the change in the wrong commit.
 
 **B — has anything since touched the same lines.** `git log --oneline
 <sha>..HEAD -- <file>`, then read the hunks of whatever it returns. The
@@ -414,6 +427,21 @@ lookup A.
 So: retarget to the latest commit that touched the lines, or land on top. A
 finding that spans commits, or attributes to none, lands on top too — say so
 explicitly rather than picking the nearest sha.
+
+**When `-L` lands outside the branch** — the initial import, or anything before
+the fork point — the finding is **unattributed**, however much a file-scoped
+query wants to hand you a branch sha. Say that plainly, then pick the target on
+one of two stated grounds: the latest commit the fix *depends on*, or the commit
+whose stated purpose owns this kind of change. Name which ground you used. The
+file-level coincidence never gets to choose.
+
+**Then check the neighbouring lines before you commit to a target.** A fixup
+editing a line that sits inside a *later* commit's hunk context will conflict on
+autosquash, even when `-L` says nothing ever touched your line. Look at what the
+later commits changed within a few lines either side; if one of them is adjacent,
+target that later commit instead. This is the one case where the latest commit
+beats the strictly correct one — cheap to spot, expensive to discover during the
+rebase.
 
 **4 — Build by concern, through tradies.** Phase 4 step 3's rule holds: you do
 not write it yourself.
@@ -435,23 +463,45 @@ repos.
 
 - **Verdicts** — accepted / declined / decided, one line each. Declines carry
   their reason; round 2 re-raises anything you declined silently.
-- **Fixup map** — one row per target commit: sha as of *this round's* recon,
-  subject, and what lands there with one line on why. **A file whose hunks split
-  across commits is named by hunk, not by path** — "`ticket-type-repository.ts`
-  — the update-guard hunk only". A bare path in a row means the whole file.
+- **Fixup map — a markdown table**, one row per target commit, columns in this
+  order:
+
+  | Target | Files | Basis |
+  | --- | --- | --- |
+  | sha as of *this round's* recon + its subject | what lands there | the step 3 line-level answer |
+
+  **Target** carries the sha and subject together, so I can eyeball that the sha
+  still matches the commit I think it is. **Files** is what lands there; **a file
+  whose hunks split across commits is named by hunk, not by path** —
+  "`ticket-type-repository.ts` — the update-guard hunk only". A bare path means
+  the whole file. **Basis** is the `git log -L` answer that chose this target,
+  or "unattributed" plus the ground you picked instead — never left blank, and
+  never a file-scoped query.
+
+- **Commands — one fenced `bash` block per table row, in apply order,
+  immediately under the table.** Not a column: a fenced block is runnable in my
+  terminal and a table cell is not. Each block stages exactly that row's paths
+  and fixes up exactly that row's sha, nothing else:
+
+  ```bash
+  git add <paths from that row> && git commit --fixup <sha>
+  ```
+
+  **A split file gets `git add -p <file>` in its own block, with a comment
+  naming the hunks for that sha**, before its fixup line — never a flat path,
+  which stages the other commit's hunk into this one and does it silently. You
+  do not run any of it, you do not `--autosquash`, you do not rebase. This phase
+  touches history more than any other; that makes the git rule tighter here, not
+  looser.
+
 - **Verified** — the commands you ran and their output, at the tip. Say plainly
   that this is the tip only: whether each commit is still green *after* the
   autosquash cannot be checked without rewriting history, which is mine to do.
   Step 3's retarget rule is what stands in for that check — if you skipped it,
   say so here.
-- **Unattributed** — anything landing as a new commit on top, and why.
-- **Commands** — for **me** to run, in order, in a fenced block. Whole-file
-  targets: `git add <paths>` then `git commit --fixup <sha>`. **A split file gets
-  `git add -p <file>` with a comment naming the hunks for that sha**, before its
-  fixup line — never a flat path, which stages the other commit's hunk into this
-  one and does it silently. You do not run any of it, you do not `--autosquash`,
-  you do not rebase. This phase touches history more than any other; that makes
-  the git rule tighter here, not looser.
+- **Unattributed** — anything landing as a new commit on top, and why. If a row's
+  Basis says unattributed, it still belongs here with the reasoning, not only in
+  the table cell.
 
 Record the round in the ledger under `## Review round N` — findings, verdicts,
 and where each landed. If the ledger is already deleted, say so and put the map
