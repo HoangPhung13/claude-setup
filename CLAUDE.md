@@ -44,6 +44,13 @@ Write one only for what the code genuinely can't say: a hidden constraint, a
 non-obvious invariant, a workaround, a surprising external behaviour. **Two
 sentences maximum.** If it truly needs more, use bullets, not a paragraph.
 
+Keep comment & commit message sentences short:
+- No semicolons. A semicolon is two sentences pretending to be one. Use a comma
+  where one fits, otherwise a period & take the sentence penalty.
+- "&" over "and".
+- Drop "the" where the sentence reads the same without it. "Extend ticket
+  service for Day screen", not "extend the ticket service for the Day screen".
+
 ```typescript
 // Each command can only have maximum of 10 parameters. Hence splitting into
 // chunks of 10s.
