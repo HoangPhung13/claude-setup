@@ -1,6 +1,6 @@
 ---
-name: delegation-brief
-description: How to write a spawn prompt that a subagent can succeed on first try. Load before delegating to scientist, tradie, or handyman, or before spawning an agent-team teammate.
+name: work-order
+description: How to write a spawn prompt that a subagent can succeed on first try — goal, scope, constraints, return shape. The crew-facing document, not the client-facing one: a design brief settles what to build, a work order tells one worker what to do. Load before delegating to scientist, tradie, handyman or draughtsman, or before spawning an agent-team teammate.
 when_to_use: Whenever you are about to spawn a subagent or teammate, or when a subagent came back with work that missed the point.
 user-invocable: false
 ---
