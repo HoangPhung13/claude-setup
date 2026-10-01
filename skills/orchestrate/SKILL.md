@@ -29,10 +29,13 @@ If more than one unfinished ledger could match, name them in one line and ask
 which. Don't guess, and don't assume the most recently modified one is mine — I
 run several of these at once.
 
-Otherwise this is a **new plan**. **Call `EnterPlanMode` before anything else.**
-Phases 1 through 3 are read-only by design, and plan mode enforces that at the
-tool layer instead of trusting you to remember. It also gives the phase 3 gate a
-real approval prompt rather than a message that just stops.
+Otherwise this is a **new plan**. Go to phase 1. **Do not call `EnterPlanMode`
+yet**: plan mode blocks spawning `handyman`, and phase 1 is nothing but
+handymen. Plan mode starts at phase 3, once recon is in hand.
+
+Phases 1 and 2 are still read-only; until plan mode is on, that rests on you and
+on the briefs. Every recon brief says so explicitly: no edits, no writes, no
+state-changing commands.
 
 ## Phase 1 — Ground yourself (cheap)
 
@@ -100,6 +103,12 @@ or obvious, or mechanical. Proceed. Say which, so I can disagree if I think
 you've mislabelled a B as a C.
 
 ## Phase 3 — Plan the commit series, and gate
+
+**Call `EnterPlanMode` now**, before writing a word of the plan. From here to
+approval nothing gets written, and plan mode enforces that at the tool layer
+instead of trusting you to remember. It also gives the gate a real approval
+prompt rather than a message that just stops. If recon turns out to have a gap,
+note it as `unverified` in the plan rather than leaving plan mode to fill it.
 
 Write, for me, in under 500 words:
 
