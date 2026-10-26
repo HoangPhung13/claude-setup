@@ -214,6 +214,8 @@ the first two combined.
   stronger tier than its agent is pinned to, that means you picked the wrong
   agent, not the wrong model: judgment goes to `scientist`, bounded
   implementation to `tradie`, legwork to `handyman`.
+- Sessions started from another session (`start_session`,
+  `hand_off_to_session`) run on Sonnet unless I say otherwise.
 - One well-briefed worker beats four speculative ones. Fan out on genuinely
   independent work, not to look busy.
 - Agent teams (`CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS`) cost several times a
