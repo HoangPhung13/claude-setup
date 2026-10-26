@@ -13,7 +13,8 @@ every reader this skill has and does not go in.
 
 ## Two rules that override everything below
 
-**Output goes in the chat, in one fenced markdown block, and nowhere else.** No
+**Output goes in the chat, one fenced markdown block per stop I named, and
+nowhere else.** No
 file, no `plans/`, no Artifact, no `gh pr edit`. I paste it where it is going
 myself. Writing it to disk creates a file nobody opens; posting it takes a
 decision that is mine.
@@ -50,9 +51,9 @@ thing is for. Take it when the name alone does not carry, not by default.
 > - You can now download any report as a spreadsheet. Open it in Excel or Sheets
 >   to build your own charts.
 
-Nothing else changes across the stops. The filter, the ordering, the banned
-words and the format are the same at all three, because they are about what is
-true, not about who is asking.
+Nothing else changes across the stops, except the headings under Format, which
+client & external share. The filter, the ordering, the banned words & the bullet shape are the
+same at all three, because they are about what is true, not about who is asking.
 
 ## Phase 1 — Get the change
 
@@ -89,11 +90,15 @@ is not delegable; gathering the raw facts is.
 **Pass one, visibility.** In: something a person can now do that they could not,
 something that now behaves differently to them, something visible that is gone.
 
+Gone counts only for what was officially live. A feature pulled before it ever
+launched was never visible, so its removal is not either.
+
 Out, always, no matter how much work it was: refactors, renames, type changes,
 dependency bumps, tests, CI, logging, error handling that nobody sees,
 performance work with no felt difference, migrations, feature flags that ship
 switched off, and anything behind an internal admin path unless the reader is
-the one using it.
+the one using it. The one exception is paid-for platform work at client, set
+out under Format.
 
 **Pass two, significance.** Visibility is a real bar in a repo where most of the
 work is invisible, and no bar at all in a UI repo, where every drag handle,
@@ -145,7 +150,8 @@ at stops 1 and 2 and for the first sentence at stop 3. Commas are fine; four
 things a feature does can read clean in eleven words. What will not fit in
 twenty is either a second bullet's worth of change or a mechanism you have
 started explaining. Name the feature the way the product names it, never the way
-the code names it.
+the code names it. Describe a change at its full reach, not by the one place the
+diff happened to show it first.
 
 **Translation.** The gap between what the diff says and what the reader needs is
 the whole skill:
@@ -190,6 +196,22 @@ would be empty**; never write a heading with "none" under it.
 ## Fixes
 - One sentence.
 ```
+
+**At client & external, the second heading is `## Improvements`, and "fix"
+appears nowhere in the block.** A client reads "fixes" as a list of things they
+paid for that came broken. An end user reads it as a list of things that broke
+on them. The split moves too:
+
+- **What's new** holds what the reader did not have before: a capability, or a
+  renamed or reworded label they will spot. At client only, it also holds
+  platform work they paid for that has no screen, such as error tracking. That
+  kind gets one bullet in plain terms, never more.
+- **Improvements** holds everything that makes something already shipped work
+  better or as intended. That covers bug symptoms, polish to existing screens,
+  sorting & display tweaks, and tighter security on an existing flow.
+
+The test is whether the reader would demo it as new. If they would say "that
+works properly now", it goes under Improvements.
 
 **Ten bullets across both sections, hard.** That holds for a whole release
 spanning a dozen PRs, because a bigger release means a higher altitude per
