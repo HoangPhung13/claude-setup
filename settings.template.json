@@ -6,6 +6,7 @@
   "showThinkingSummaries": true,
   "verbose": true,
   "effortLevel": "high",
+  "idleCompaction": false,
   "env": {
     "CLAUDE_CODE_MAX_SUBAGENT_SPAWN_DEPTH": "2"
   },
