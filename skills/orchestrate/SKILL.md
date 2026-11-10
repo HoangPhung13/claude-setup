@@ -284,6 +284,20 @@ it.
 tradie's "done" is a claim; the passing test is the evidence. Do not relay a
 report you haven't checked.
 
+Then a `commissioner` verifies the commit end to end, as much as it can reach.
+Do this after you've read the diff & the checks are green, and before handback.
+Brief it with:
+
+- what the commit claims, in behaviour terms
+- the environment & the store of record
+- every path it should drive: UI, API, DB, payment test mode, simulator
+- the constraints (local only, no deletes, label anything it creates)
+
+It returns a results table, findings with repros, what it couldn't reach & why,
+and the rows it created. Fix nothing on its say-so. Its findings go into the
+handback as accept, defer or decline, & I choose. Skip it only when the commit
+has nothing a user or editor could drive. Say so in **Verified**.
+
 **5 — Hand back, and stop.** Give me, in this order:
 
 - **Commit N of M — `<subject>`**
@@ -337,6 +351,18 @@ Exactly what I asked for: no drive-by fixes, no reformatting, no renames I didn'
 name. If you spot something else, one line at the end. Re-run the project's own
 checks — the commit was green when you handed it back, it has to still be green.
 Never commit, and never stage unless I ask.
+
+**The commissioner re-verifies after the edits.** That holds whoever approved
+them, you or me. Resume the same commissioner rather than spawning a new one, so
+it keeps its repros. Brief it to:
+
+- re-run every finding the edits claim to fix
+- run one happy-path regression through the commit's main flow
+- where a fix tightens a check, try the valid input right at its edge, because
+  the happy path rarely goes there
+
+Fold its results table into your return. The correction isn't verified until it
+reports back.
 
 Then append to this commit's **Handoff** section what I asked for and what
 changed, one line each — that section is the only reason the next tradie will
@@ -468,6 +494,22 @@ the house rules covering those files verbatim as in phase 4 step 2, and the
 constraint that it fixes those findings and nothing else. No lane spans two git
 repos.
 
+**Then read the diff, run the project's checks, and send a `commissioner` over
+the round.** A review finding is a claim about running behaviour, so a fix is
+proven the same way a commit is. Brief it with:
+
+- each accepted finding as a repro: what the reviewer said happens, and what
+  should happen now
+- one happy-path regression through each commit the round touches
+- the edge right next to each fix, where a fix tightens a check
+- the environment, the store of record & its usual constraints
+
+A finding it can't reach (needs a token, a device, real provider delivery) goes
+under **Verified** as specs-only, with the reason. If it finds something new, it
+joins this round's verdicts. It doesn't become a silent extra fixup. Skip it
+only when every accepted finding is untestable from outside (typing, comments,
+docs), and say so.
+
 **5 — Hand back the fixup map, and stop.** The output is not a commit message:
 
 - **Verdicts** — accepted / declined / decided, one line each. Declines carry
@@ -507,7 +549,8 @@ repos.
   that this is the tip only: whether each commit is still green *after* the
   autosquash cannot be checked without rewriting history, which is mine to do.
   Step 3's retarget rule is what stands in for that check — if you skipped it,
-  say so here.
+  say so here. Include the commissioner's results table, with any finding it
+  could only cover through specs marked as such.
 - **Unattributed** — anything landing as a new commit on top, and why. If a row's
   Basis says unattributed, it still belongs here with the reasoning, not only in
   the table cell.
