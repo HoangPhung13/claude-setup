@@ -13,7 +13,8 @@ every reader this skill has and does not go in.
 
 ## Two rules that override everything below
 
-**Output goes in the chat, one fenced markdown block per stop I named, and
+**Output goes in the chat, one fenced markdown block per stop I named, plus a
+plain text block when the release ships to the App Store or Google Play, and
 nowhere else.** No
 file, no `plans/`, no Artifact, no `gh pr edit`. I paste it where it is going
 myself. Writing it to disk creates a file nobody opens; posting it takes a
@@ -208,10 +209,29 @@ on them. The split moves too:
   kind gets one bullet in plain terms, never more.
 - **Improvements** holds everything that makes something already shipped work
   better or as intended. That covers bug symptoms, polish to existing screens,
-  sorting & display tweaks, and tighter security on an existing flow.
+  sorting & display tweaks, and tighter security on an existing flow. A new
+  state that replaces something broken is still an improvement, such as a
+  "coming soon" placeholder where missing content used to fail.
 
 The test is whether the reader would demo it as new. If they would say "that
 works properly now", it goes under Improvements.
+
+**Store release notes are plain text.** Neither the App Store nor Google Play
+renders markdown. When the release ships a mobile app, add a second fenced
+block tagged `text` with the same content: headings as bare lines, bullets as
+`•`, a blank line between sections.
+
+```text
+What's new
+• One sentence.
+
+Improvements
+• One sentence.
+```
+
+Google Play caps release notes at 500 characters per language, so count them.
+If the block is over, tighten the wording first. If it is still over, cut from
+the bottom of Improvements & say in one line what was cut.
 
 **Ten bullets across both sections, hard.** That holds for a whole release
 spanning a dozen PRs, because a bigger release means a higher altitude per
@@ -236,6 +256,6 @@ Hits are not automatically wrong; a product genuinely called API Keys is fine.
 Read each one and decide. A hit you cannot justify to a non-engineer is a bullet
 to rewrite.
 
-Hand me the block, and one line naming which stop you used so I can tell you to
+Hand me the block (or both blocks), and one line naming which stop you used so I can tell you to
 move it. Nothing else: no preamble, no account of what you left out unless I
 asked, no offer to post it.
