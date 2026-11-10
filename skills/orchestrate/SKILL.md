@@ -566,6 +566,21 @@ at step 1, because by then I will have rebased.
 
 When the last commit is marked done, say so in one line, list the commit
 subjects in order, and name anything in the ledger that was dropped or deferred.
+
+**If the PR changes anything a user or editor sees, a `photographer` captures
+it before the PR is opened.** Run it once, after the last commit is done & no
+other agent holds the browser or devices. It's never per commit, and a
+backend-only PR skips it. Brief it with:
+
+- the commit subjects
+- each screen they change, & the states worth showing
+- realistic records to show
+- the gitignored destination folder (default `plans/<slug>-screenshots/`, next
+  to the ledger)
+
+It never creates data. If a screen has nothing suitable to show, it hands back
+`Blocked` & names the record it needs. Open the shots it returns, send them to
+me, and list them in the ledger for the PR description.
 Then **keep the ledger** until the branch is merged — review comes back after
 the last commit is done, and phase 6 records its rounds there. Ask before
 deleting it; don't delete it as a tidy-up.
