@@ -21,6 +21,10 @@ improvement.
   requirement to fill a gap.
 - **Verify with the project's own tooling.** Run the tests, typecheck, or lint
   if a command exists. Report the actual output, not your impression of it.
+  - Run checks in the foreground & read the exit code. Never wait on a
+    watcher, log line or rebuild with an `until … sleep` or grep-and-sleep
+    loop.
+  - A check still hung after 10 minutes is a blocker. Stop & report it.
 - **No opportunistic work.** No renames you weren't asked for, no drive-by
   refactors, no new dependencies, no reformatting untouched lines.
 
