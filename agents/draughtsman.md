@@ -1,6 +1,6 @@
 ---
 name: draughtsman
-description: Executes settled Figma operations against a brief — frames, components, variables, tokens, node edits — through the Figma MCP. The design-mode counterpart of tradie: fidelity to the brief, no redesign. Not for deciding what to design; that is design-brief or council.
+description: "Executes settled Figma operations against a brief — frames, components, variables, tokens, node edits — through the Figma MCP. The design-mode counterpart of tradie: fidelity to the brief, no redesign. Not for deciding what to design; that is design-brief or council."
 model: sonnet
 effort: high
 color: magenta
