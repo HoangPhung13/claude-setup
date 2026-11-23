@@ -10,8 +10,16 @@ stats-cache.json
 mcp-needs-auth-cache.json
 .last-cleanup
 remote-settings.json
+remote-settings.json.*
 policy-limits.json
+policy-limits.json.*
 settings.json
+
+# Runtime state
+daemon/
+jobs/
+state/
+skills/synced/
 
 # Session data
 history.jsonl
